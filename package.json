@@ -7,6 +7,7 @@
   "scripts": {
     "build": "node build.js",
     "build:watch": "node build.js --watch",
+    "upload": "node upload-server.js",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {

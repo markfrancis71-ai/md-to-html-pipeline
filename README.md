@@ -37,10 +37,28 @@ If you skip front-matter, the first `# Heading` becomes the title, today's date 
 npm install
 npm run build           # input/*.md -> dist/*.html + dist/index.html
 npm run build:watch     # rebuild on input/ or template change
+npm run upload          # browser-based file picker (see below)
 npm run clean           # delete dist/
 ```
 
 Open `dist/index.html` in a browser to preview before pushing.
+
+## Upload UI (`npm run upload`)
+
+Starts a tiny local server at `http://localhost:3737` with a styled drag-and-drop interface for adding `.md` files:
+
+- Click or drop `.md` / `.markdown` files into the page
+- Each file is copied into `input/` and the site rebuilds automatically
+- Multiple files supported in a single drop
+- Existing names are overwritten (warning shown in the log)
+- 5 MB cap per file
+- Browser opens automatically; pass `--no-open` to skip
+
+After uploading, commit and push to deploy:
+
+```bash
+git add input/ && git commit -m "Add docs" && git push
+```
 
 ## Project layout
 
@@ -50,6 +68,7 @@ Open `dist/index.html` in a browser to preview before pushing.
 | `build.js`                 | Reads `input/*.md`, renders via marked + front-matter, writes `dist/`. |
 | `template.html`            | Per-page HTML shell with `{{title}}` / `{{content}}` placeholders.     |
 | `index-template.html`      | Index page shell listing all documents.                                |
+| `upload-server.js`         | Local file-picker server (`npm run upload`) for drag-drop into `input/`. |
 | `styles.css`               | Daily Brief theme (copied verbatim into `dist/` on build).             |
 | `dist/`                    | Build output. Git-ignored. Generated and uploaded by the Action.       |
 | `.github/workflows/deploy.yml` | CI: builds and deploys to Pages on every push to `main`.           |
