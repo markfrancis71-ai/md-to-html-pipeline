@@ -45,20 +45,26 @@ Open `dist/index.html` in a browser to preview before pushing.
 
 ## Upload UI (`npm run upload`)
 
-Starts a tiny local server at `http://localhost:3737` with a styled drag-and-drop interface for adding `.md` files:
+Starts a local server at `http://localhost:3737` with a full edit-preview-deploy workflow:
 
-- Click or drop `.md` / `.markdown` files into the page
-- Each file is copied into `input/` and the site rebuilds automatically
-- Multiple files supported in a single drop
-- Existing names are overwritten (warning shown in the log)
-- 5 MB cap per file
-- Browser opens automatically; pass `--no-open` to skip
+1. **Drop or pick** `.md` / `.markdown` files (multiple supported, 5 MB cap each).
+2. **Edit front-matter** in the form fields that appear per file (filename, title, eyebrow, meta, date, summary). Existing front-matter is parsed and pre-filled.
+3. **Live preview** — an iframe shows the rendered page, updated 300 ms after each keystroke.
+4. **Save to input/** writes the file (with rebuilt front-matter block) and triggers `npm run build`.
+5. **Deploy now** runs `git add input/ && git commit && git push` from the page; the GitHub Action picks it up and Pages updates in ~30–60s.
 
-After uploading, commit and push to deploy:
+The Deploy panel polls `git status input/` so you can see exactly how many files are staged before pushing. Browser opens automatically; pass `--no-open` to skip.
 
-```bash
-git add input/ && git commit -m "Add docs" && git push
-```
+### Upload-server endpoints
+
+| Method | Path           | Purpose                                                        |
+|--------|----------------|----------------------------------------------------------------|
+| GET    | `/`            | Uploader UI                                                    |
+| GET    | `/styles.css`  | Theme stylesheet                                               |
+| POST   | `/upload`      | Save bytes to `input/<X-Filename>` and run `npm run build`    |
+| POST   | `/preview`     | Render `{markdown, filename}` JSON → full HTML (styles inlined)|
+| GET    | `/git-status`  | `git status --porcelain input/` summary                       |
+| POST   | `/deploy`      | `git add input/ && git commit && git push`                    |
 
 ## Project layout
 
@@ -68,7 +74,8 @@ git add input/ && git commit -m "Add docs" && git push
 | `build.js`                 | Reads `input/*.md`, renders via marked + front-matter, writes `dist/`. |
 | `template.html`            | Per-page HTML shell with `{{title}}` / `{{content}}` placeholders.     |
 | `index-template.html`      | Index page shell listing all documents.                                |
-| `upload-server.js`         | Local file-picker server (`npm run upload`) for drag-drop into `input/`. |
+| `renderer.js`              | Shared parsing + rendering (`parseDoc`, `renderPage`, `renderIndex`). Used by `build.js` and the `/preview` endpoint. |
+| `upload-server.js`         | Local upload UI: edit front-matter, live preview, save, and deploy.     |
 | `styles.css`               | Daily Brief theme (copied verbatim into `dist/` on build).             |
 | `dist/`                    | Build output. Git-ignored. Generated and uploaded by the Action.       |
 | `.github/workflows/deploy.yml` | CI: builds and deploys to Pages on every push to `main`.           |
