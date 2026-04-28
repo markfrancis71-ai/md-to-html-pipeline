@@ -1,3 +1,11 @@
+---
+title: Blueprint for the Modern Architect
+eyebrow: Training Notes
+meta: Core Training · Day 2
+date: 2026-04-22
+summary: Mindset, stakeholder engagement, and the architect's toolkit.
+---
+
 # Blueprint for the Modern Architect: Mindset and Mastery
 
 ## Reimagining Architecture (Core Training Day 2)

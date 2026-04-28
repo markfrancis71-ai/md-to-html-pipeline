@@ -1,14 +1,16 @@
 {
   "name": "md-to-html-pipeline",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Minimal Markdown -> styled HTML pipeline matching the Daily Brief design.",
+  "description": "Multi-page Markdown -> styled HTML pipeline with YAML front-matter, matching the Daily Brief design.",
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "build:watch": "node build.js --watch"
+    "build:watch": "node build.js --watch",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "marked": "^14.1.3"
   }
 }

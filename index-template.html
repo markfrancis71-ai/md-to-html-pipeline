@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{title}}</title>
+  <title>{{site_title}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -11,20 +11,16 @@
   <div class="container">
     <header>
       <div class="header-eyebrow">{{eyebrow}}</div>
-      <h1>{{title}}</h1>
+      <h1>{{site_title}}</h1>
       <p class="header-meta">{{meta}}</p>
       <hr class="header-rule">
     </header>
 
     <article class="card">
-      <div class="prose">
-{{content}}
+      <div class="doc-list">
+{{entries}}
       </div>
     </article>
-
-    <nav class="page-nav">
-      <a href="index.html">← All documents</a>
-    </nav>
 
     <footer>Built with marked.js · {{generated}}</footer>
   </div>
