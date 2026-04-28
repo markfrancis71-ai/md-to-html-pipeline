@@ -71,7 +71,7 @@ export function renderPage(doc, { template, generated }) {
     .replace('{{generated}}', generated);
 }
 
-export function renderIndex(docs, { template, generated, siteTitle = 'Daily Brief Library', siteEyebrow = 'Index' }) {
+export function renderIndex(docs, { template, generated, siteTitle = 'Markdown to HTML Library', siteEyebrow = 'Index' }) {
   const entries = docs.map(d => `
         <a class="doc-entry" href="${escapeHtml(d.slug)}.html">
           <div class="doc-entry-eyebrow">${escapeHtml(d.eyebrow)}</div>
