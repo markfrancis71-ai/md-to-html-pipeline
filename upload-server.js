@@ -12,12 +12,14 @@ const MAX_BYTES = 5 * 1024 * 1024;
 
 const LIVE_URL = 'https://markfrancis71-ai.github.io/md-to-html-pipeline/';
 
-function runCmd(cmd, args, opts = {}) {
+function runCmd(cmd, args, { useShell = false, ...opts } = {}) {
+  // shell:true is needed on Windows for .cmd shims like npm.cmd, but breaks
+  // arg quoting (cmd.exe re-parses), so do NOT enable it for native exes (git).
   return new Promise(res => {
     let out = '';
     const p = spawn(cmd, args, {
       cwd: __dirname,
-      shell: process.platform === 'win32',
+      shell: useShell && process.platform === 'win32',
       ...opts,
     });
     p.stdout.on('data', d => out += d);
@@ -27,7 +29,7 @@ function runCmd(cmd, args, opts = {}) {
   });
 }
 
-const runBuild = () => runCmd('npm', ['run', 'build']);
+const runBuild = () => runCmd('npm', ['run', 'build'], { useShell: true });
 
 async function readRawBody(req, max = MAX_BYTES) {
   let total = 0;
